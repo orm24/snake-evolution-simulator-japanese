@@ -3,68 +3,74 @@ import { placeFood, drawFood, handleFoodCollisions } from './food.js';
 import { clearBoard } from './board.js';
 import { snakes, setBoard, setContext, getStopSimulation, setStopSimulation, foods } from './global.js';
 
-// Var to hold the interval ID for the game loop 
 // ゲームループのinterval IDを持つための変数
 let intervalId = null; 
 
-// Runs when window is first loaded sets the parameters of the game and adds event listeners to buttons
-// This function initializes the game settings and attaches event listeners to the control buttons
 // ウィンドウが開かれた時ゲームのパラメータを設定、ボタンにイベントリスナーを追加、ゲームを初期化
 window.onload = function () {
-    const cellSize = 25; // Size of each cell in the game grid
-    const total_col = 20; // Total number of columns in the game grid
-    const total_row = 20;
+    const cellSize = 25; // ゲームグリッドにおけるセルのサイズ
+    const total_col = 20; // ゲームグリッドにおける列の合計
+    const total_row = 20;　// ゲームグリッドにおける行の合計
 
-    window.cellSize = cellSize;
+    // 各値をグローバル化
+    window.cellSize = cellSize;　
     window.total_col = total_col;
     window.total_row = total_row;
 
+    // ゲーム表示のためのcanvasを取得
     const boardElement = document.getElementById("gameCanvas");
+    // canvasの幅を設定
     boardElement.width = cellSize * total_col;
+    // canvasの高さを設定
     boardElement.height = cellSize * total_row;
 
-    setBoard(boardElement);
-    const ctx = boardElement.getContext("2d");
-    ctx.imageSmoothingEnabled = false;
-    setContext(ctx);
-
+    setBoard(boardElement); // ゲームボードを初期化
+    const ctx = boardElement.getContext("2d");　//２Dレンダリングコンテクストを取得
+    ctx.imageSmoothingEnabled = false;　//imageSmoothingを解除
+    setContext(ctx);　//コンテクストをグローバル化
+    
+    //ボタンにイベントリスナーを追加
     document.getElementById('startButton').addEventListener('click', startSimulation);
     document.getElementById('stopButton').addEventListener('click', stopSimulation);
     document.getElementById('addFoodButton').addEventListener('click', placeFood);
     document.getElementById('restartButton').addEventListener('click', restartSimulation);
 
-    restartSimulation(); // initial setup without auto-start
+    //ゲームスタート
+    restartSimulation(); 
 };
 
-// Start the interval
+// ゲームループのインターバルを開始
 function startSimulation() {
-    if (intervalId !== null) return; // already running
-    setStopSimulation(false);
-
+    if (intervalId !== null) return; // ゲームがスタートしているなら退出
+    setStopSimulation(false);　//シミュレーションをスタート
+    //　ゲームループが１００msごとにアップデートするように設定
     intervalId = setInterval(update, 1000 / 10);
 }
 
-// Stop the interval
+// ゲームループのインターバルを停止
 function stopSimulation() {
-    setStopSimulation(true);
+    setStopSimulation(true);　//　シミュレーションを停止
 
     if (intervalId !== null) {
-        clearInterval(intervalId);
-        intervalId = null;
+        clearInterval(intervalId);　//　インターバルをクリア
+        intervalId = null;　//　intervalIdをリセット
     }
 }
 
-// Restart everything with new input values
+// インプット値に基づき全てをリセット
 function restartSimulation() {
-    stopSimulation(); // halt current run
-    snakes.length = 0;
+    stopSimulation(); // シミュレーション停止
+    //配列を空ける
+    snakes.length = 0;　
     foods.length = 0;
 
+    //　ステータスパネルのエレメントを取得
     const panel = document.getElementById('statusPanel');
-    if (panel) panel.innerHTML = '';
+    if (panel) panel.innerHTML = '';　//　ステータスパネルをアップデート前に一度空ける
 
-    clearBoard();
+    clearBoard();　//　ボードを初期化
 
+    //　メス蛇の値を取得
     const femaleInputs = {
         speedA: parseFloat(document.getElementById("femaleSpeedA").value),
         speedB: parseFloat(document.getElementById("femaleSpeedB").value),
@@ -73,7 +79,8 @@ function restartSimulation() {
         energyA: parseFloat(document.getElementById("femaleStartEnergyA").value),
         energyB: parseFloat(document.getElementById("femaleStartEnergyB").value),
     };
-    
+
+    //　オス蛇の値を取得
     const maleInputs = {
         speedA: parseFloat(document.getElementById("maleSpeedA").value),
         speedB: parseFloat(document.getElementById("maleSpeedB").value),
@@ -83,42 +90,44 @@ function restartSimulation() {
         energyB: parseFloat(document.getElementById("maleStartEnergyB").value),
     };
     
-    placeSnake(0, femaleInputs); // Female
-    placeSnake(1, maleInputs);   // Male
+    placeSnake(0, femaleInputs); // メス設置
+    placeSnake(1, maleInputs);   // オス設置
     
-    placeFood();
+    placeFood();　//食べ物設置
 
-    startSimulation() 
-    update(); // draw initial state (optional)
+    startSimulation() //　シミュレーション開始
+    update(); 
 }
 
-// updates game board
+// ゲームボードをアップデート
 function update() {
-    if (getStopSimulation()) return;
+    if (getStopSimulation()) return;　//シミュレーションが停止した場合退出
 
-    if (snakes.length > 50) {
+    //　ヘビが増えすぎた場合ユーザーにメッセージを出し強制終了
+    if (snakes.length > 50) {　
         alert("Too many snakes, program ended.");
         stopSimulation();
         return;
     }
 
-    clearBoard();
-    moveSnakes();
-    handleFoodCollisions();
-    handleSnakeCollisions();
-    checkSnakeDeath();
-    drawFood();
-    drawSnakes();
-    updateStatusPanel();
+    clearBoard();　//　次のフレームのためボードを元に戻す
+    moveSnakes();　//　ヘビを動かす
+    handleFoodCollisions();　//　ヘビと食べ物の衝突を確認
+    handleSnakeCollisions();　//　ヘビとヘビの衝突を確認
+    checkSnakeDeath();　//　ヘビの生存確認
+    drawFood();　//　食べ物をボードに描く
+    drawSnakes();　//　ヘビをボードに描く
+    updateStatusPanel();　//　ステータスパネルをアップデート
 }
 
+//　ステータスパネルをアップデートする関数
 function updateStatusPanel() {
-    const panel = document.getElementById('statusPanel');
-    if (!panel) return;
+    const panel = document.getElementById('statusPanel');　//ステータスパネルを取得
+    if (!panel) return;　//　パネルが見つからない場合退出
 
-    panel.innerHTML = ''; // clear before updating
+    panel.innerHTML = ''; // アップデート前に元に戻す
 
-    // --- Compute averages ---
+    // 平均値を計算
     if (snakes.length > 0) {
         const total = snakes.reduce((acc, s) => {
             acc.speed += s.speed;
@@ -131,6 +140,7 @@ function updateStatusPanel() {
         const avgEnergy = (total.energy / snakes.length).toFixed(2);
         const avgEfficiency = (total.efficiency / snakes.length).toFixed(2);
 
+        //　平均値表示のためのHTML
         const avgHTML = `
             <div style="margin-bottom: 20px;">
                 <strong>Averages:</strong><br>
@@ -143,7 +153,7 @@ function updateStatusPanel() {
         panel.innerHTML += avgHTML;
     }
 
-    // --- List each snake ---
+    // 各ヘビを表示
     snakes.forEach((s, index) => {
         const snakeInfo = `
             <div style="display: flex; align-items: center; margin-bottom: 10px;">
