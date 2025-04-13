@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport", 
+          content="width=device-width, initial-scale=1.0">
+    <title>Snake Evolution Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1 class="titleSnake">Snake</h1>
+    <div class="restOfTitle">Evolution Simulator</div>
+    <br />
+    
+    <!-- Snake configuration panel -->
+    <!-- ヘビ性質設定パネル -->
+    <div style="max-width: 800px; margin: auto;">
+        <fieldset style="margin-bottom: 20px;">
+            <legend><strong>Configure Initial Snakes</strong></legend>
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                    <h4>Snake 1 (Female)</h4>
+                    <label>Energy A1 (500~1000): <input id="femaleStartEnergyA" type="number" value="800"></label><br>
+                    <label>Energy A2 (500~1000): <input id="femaleStartEnergyB" type="number" value="800"></label><br>
+                    <label>Speed A1 (1~3): <input id="femaleSpeedA" type="number" min="1" max="3" value="2"></label><br>
+                    <label>Speed A2 (1~3): <input id="femaleSpeedB" type="number" min="1" max="3" value="2"></label><br>
+                    <label>Efficiency A1 (1~3): <input id="femaleEnergyEfficiencyA" type="number" min="1" max="3" value="2"></label><br>
+                    <label>Efficiency A2 (1~3): <input id="femaleEnergyEfficiencyB" type="number" min="1" max="3" value="2"></label>
+                </div>
+                <div>
+                    <h4>Snake 2 (Male)</h4>
+                    <label>Energy A1 (500~1000): <input id="maleStartEnergyA" type="number" value="800"></label><br>
+                    <label>Energy A2 (500~1000): <input id="maleStartEnergyB" type="number" value="800"></label><br>
+                    <label>Speed A1 (1~3): <input id="maleSpeedA" type="number" min="1" max="3" value="2"></label><br>
+                    <label>Speed A2 (1~3): <input id="maleSpeedB" type="number" min="1" max="3" value="2"></label><br>
+                    <label>Efficiency A1 (1~3): <input id="maleEnergyEfficiencyA" type="number" min="1" max="3" value="2"></label><br>
+                    <label>Efficiency A2 (1~3): <input id="maleEnergyEfficiencyB" type="number" min="1" max="3" value="2"></label>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <!-- Game board and status panel -->
+    <!-- ゲームボード及びステータスパネル -->
+    <div style="display: flex; justify-content: center; align-items: flex-start;">
+        <canvas id="gameCanvas"></canvas>
+        <div id="statusPanel" style="margin-left: 20px; width: 300px;"></div>
+    </div>    
+    <br />
+    <!-- Action Buttons アクションボタン -->
+    <div class="button-container">
+        <button id="startButton">Start</button>
+        <button id="stopButton">Stop</button>
+        <button id="addFoodButton">Add Food</button>
+        <button id="restartButton">Restart</button>
+    </div>
+      
+    <script type="module" src="js/main.js"></script>
+    
+</body>
+</html>
