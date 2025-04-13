@@ -28,7 +28,7 @@ canvas {
     border: 1px solid black;
     display: block;
     margin: 20px auto;
-    image-rendering: pixelated; /* prevent smoothing */
+    image-rendering: pixelated; /* スムージングを阻止 */
     width: auto;
     height: auto;
 }
@@ -42,7 +42,7 @@ button{
 
 .button-container {
     display: flex;
-    gap: 10px; /* spacing between buttons */
+    gap: 10px; /* ボタンの間に隙間を加える */
     margin: 10px;
   }
 
