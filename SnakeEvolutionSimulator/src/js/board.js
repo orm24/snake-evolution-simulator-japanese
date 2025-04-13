@@ -1,11 +1,12 @@
 import { board, context, total_col, total_row, blockSize} from './global.js';
 
-// clears board and resets it
+// ボードをオリジナルに戻す関数
 export function clearBoard(){
     context.fillStyle = "#476930";
     context.fillRect(0, 0, board.width, board.height);
 }
 
+// グリッドを書く関数　現在使用していない
 export function drawGrid() {
     context.strokeStyle = "#a3b18a";
     context.lineWidth = 1; 
